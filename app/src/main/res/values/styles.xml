@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Name" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/name</item>
+    </style>
+    <style name="Symbol" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/symbol</item>
+    </style>
+    <style name="Change" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/change</item>
+    </style>
+</resources>
