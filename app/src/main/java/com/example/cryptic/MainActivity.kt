@@ -15,22 +15,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = DataAdapter()
 
-//    val btc = CrypticData("Bitcoin","BTC", "40000.0", "5.1%")
-//    val ether = CrypticData("Ethereum","ETH", "10000.0", "3.5%")
-//    val tether = CrypticData("Tether","THT", "1.0", "0.1%")
-//    val dog = CrypticData("DogeCoin","DOG", "1000.0", "1.1%")
-//    val list = listOf(btc,ether,tether,dog)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.rvList.layoutManager = LinearLayoutManager(this)
         binding.rvList.adapter = adapter
-        requestData(binding)
+        binding.buttonAdd.setOnClickListener {
+            binding.rvList.removeAllViewsInLayout()
+            requestData()
+        }
         }
 
-    private fun requestData(binding: ActivityMainBinding) {
+    private fun requestData() {
         Thread {
             val client = OkHttpClient()
 
@@ -44,11 +41,7 @@ class MainActivity : AppCompatActivity() {
             val response = client.newCall(request).execute()
 
             val coins: List<CrypticData> = jacksonObjectMapper().readValue(response.body!!.string())
-            binding.buttonAdd.setOnClickListener {
-                coins.forEach {
-                    adapter.addData(it)
-                }
-            }
+            runOnUiThread { run { coins.forEach { adapter.addData(it) }}}
         }.start()
     }
 }

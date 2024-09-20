@@ -1,5 +1,7 @@
 package com.example.cryptic
 
+import android.graphics.Color
+import android.icu.text.DecimalFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +13,18 @@ class DataAdapter: RecyclerView.Adapter<DataAdapter.DataHolder>() {
     class DataHolder(item: View): RecyclerView.ViewHolder(item) {
         val binding = DataItemBinding.bind(item)
         fun bind(data: CrypticData) {
+            val decimalFormat = DecimalFormat("#.###")
             binding.tvName.text = data.name
-            binding.tvPrice.text = data.current_price.toString()
-            binding.tvSymbol.text = data.symbol
-            binding.tvPriceChange24h.text = data.price_change_percentage_24h.toString()
+            binding.tvPrice.text = "$${decimalFormat.format(data.current_price)}"
+            binding.tvSymbol.text = data.symbol.uppercase()
+            if (data.price_change_percentage_24h >= 0) {
+                binding.tvPriceChange24h.setTextColor(Color.parseColor("#25FF00"))
+                binding.tvPriceChange24h.text = "⬉${decimalFormat.format(data.price_change_percentage_24h)}%"
+            }
+            else {
+                binding.tvPriceChange24h.setTextColor(Color.parseColor("#FF0000"))
+                binding.tvPriceChange24h.text = "⬋${decimalFormat.format(data.price_change_percentage_24h)}%"
+            }
         }
     }
 

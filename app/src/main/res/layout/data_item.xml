@@ -3,59 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="70dp">
 
     <TextView
         android:id="@+id/tvName"
-        style="@style/Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/akatab_bold"
         android:text="Bitcoin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvSymbol"
-        style="@style/Symbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/akatab_bold"
         android:text="BTC"
-        app:layout_constraintBottom_toBottomOf="@+id/tvName"
-        app:layout_constraintStart_toEndOf="@+id/tvName"
-        app:layout_constraintTop_toTopOf="@+id/tvName" />
+        android:textColor="@color/grey"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
     <TextView
         android:id="@+id/tvPrice"
-        style="@style/Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="40000$"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/akatab_bold"
+        android:text="$40000"
+        android:textSize="20sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tvName" />
 
     <TextView
         android:id="@+id/tvPrice24h"
-        style="@style/Change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:fontFamily="@font/akatab_bold"
         android:text="24h"
-        app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
-        app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-        app:layout_constraintTop_toTopOf="@+id/tvPrice" />
+        android:textSize="15sp"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
 
     <TextView
         android:id="@+id/tvPriceChange24h"
-        style="@style/Change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="2.11%"
+        android:fontFamily="@font/akatab_bold"
+        android:text="⬉2.11%"
+        android:textColor="@color/grey"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvPrice24h"
         app:layout_constraintEnd_toStartOf="@+id/tvPrice24h"
         app:layout_constraintTop_toTopOf="@+id/tvPrice24h" />
