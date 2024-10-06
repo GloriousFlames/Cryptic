@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class DataAdapter: RecyclerView.Adapter<DataAdapter.DataHolder>() {
 
-    val curList = ArrayList<CrypticData>()
+    var curList = ArrayList<CrypticData>()
 
     class DataHolder(item: View): RecyclerView.ViewHolder(item) {
 
@@ -47,7 +47,10 @@ class DataAdapter: RecyclerView.Adapter<DataAdapter.DataHolder>() {
     override fun getItemCount(): Int {
         return curList.size
     }
-
+    fun setFilteredList(list : ArrayList<CrypticData>) {
+        curList = list
+        notifyDataSetChanged()
+    }
     fun addData(data: CrypticData) {
         curList.add(data)
         notifyItemInserted(curList.size - 1)
