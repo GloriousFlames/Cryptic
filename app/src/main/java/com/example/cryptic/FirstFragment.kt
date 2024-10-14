@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -19,32 +20,29 @@ import okhttp3.Request
 
 class FirstFragment : Fragment() {
 
-    private val dataAdapter = DataAdapter()
-    private val coinList = ArrayList<CrypticData>()
+    private val dataAdapterFirst = DataAdapterFirst()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_first, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val rvList: RecyclerView = view.findViewById(R.id.rvList)
-        val btnAdd: Button = view.findViewById(R.id.btnAdd)
-        val searchView : SearchView = view.findViewById(R.id.searchView)
-        rvList.adapter = dataAdapter
-        rvList.layoutManager = LinearLayoutManager(activity)
 
-        btnAdd.setOnClickListener {
-            coinList.clear()
-            rvList.removeAllViewsInLayout()
-            requestData { coins ->
-                coins.forEach {
-                    coinList.add(it)
-                } }
+        val sharedList = ViewModelProvider(requireActivity()).get(ShareData::class.java)
+        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewFirst)
+        val btnCurrencyAdd: Button = view.findViewById(R.id.btnCurrencyUpdate)
+        val searchView : SearchView = view.findViewById(R.id.searchView)
+        recyclerView.adapter = dataAdapterFirst
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        btnCurrencyAdd.setOnClickListener {
+            recyclerView.removeAllViewsInLayout()
+            requestData()
+            sharedList.setData(dataAdapterFirst.curList)
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -60,21 +58,24 @@ class FirstFragment : Fragment() {
         })
 
     }
+
     private fun filterList(query : String?) {
         if (query != null) {
             val filteredList = ArrayList<CrypticData>()
-            for (i in coinList) {
+            for (i in dataAdapterFirst.curList) {
                 if (i.name.lowercase().contains(query)) {
                     filteredList.add(i)
                 }
             }
-            if (filteredList.isEmpty()) { Toast.makeText(activity,"No Data found", Toast.LENGTH_SHORT).show() }
-            else { dataAdapter.setFilteredList(filteredList) }
+            if (filteredList.isEmpty()) {
+                Toast.makeText(activity,"No Data found", Toast.LENGTH_LONG).show()
+            }
+            dataAdapterFirst.setFilteredList(filteredList)
 
         }
     }
 
-    private fun requestData(callback: (List<CrypticData>) -> Unit) {
+    private fun requestData() {
         Thread {
             val client = OkHttpClient()
 
@@ -88,9 +89,8 @@ class FirstFragment : Fragment() {
             val response = client.newCall(request).execute()
 
             val coins: ArrayList<CrypticData> = jacksonObjectMapper().readValue(response.body!!.string())
-            callback(coins)
 
-            Handler(Looper.getMainLooper()).post { coins.forEach { dataAdapter.addData(it) } }
+            Handler(Looper.getMainLooper()).post { coins.forEach { dataAdapterFirst.addData(it) } }
 
         }.start()
     }

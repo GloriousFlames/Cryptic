@@ -8,4 +8,7 @@ data class CrypticData(
     var symbol: String,
     var current_price: Float,
     var price_change_percentage_24h: Float
-)
+) {
+    var count: Float = 0f
+}
+

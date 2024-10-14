@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class DataAdapter: RecyclerView.Adapter<DataAdapter.DataHolder>() {
+class DataAdapterFirst: RecyclerView.Adapter<DataAdapterFirst.DataHolder>() {
 
     var curList = ArrayList<CrypticData>()
 
@@ -19,24 +19,26 @@ class DataAdapter: RecyclerView.Adapter<DataAdapter.DataHolder>() {
         private val tvSymbol: TextView = itemView.findViewById(R.id.tvSymbol)
         private val tvPriceChange24h: TextView = itemView.findViewById(R.id.tvPriceChange24h)
 
+        private val decimalFormat = DecimalFormat("#.###")
+
         fun bind(data: CrypticData) {
-            val decimalFormat = DecimalFormat("#.###")
             tvName.text = data.name
             tvPrice.text = "$${decimalFormat.format(data.current_price)}"
             tvSymbol.text = data.symbol.uppercase()
             if (data.price_change_percentage_24h >= 0) {
                 tvPriceChange24h.setTextColor(Color.parseColor("#25FF00"))
-                tvPriceChange24h.text = "⬉${decimalFormat.format(data.price_change_percentage_24h)}%"
-            }
-            else {
+                tvPriceChange24h.text =
+                    "⬉${decimalFormat.format(data.price_change_percentage_24h)}%"
+            } else {
                 tvPriceChange24h.setTextColor(Color.parseColor("#FF0000"))
-                tvPriceChange24h.text = "⬋${decimalFormat.format(data.price_change_percentage_24h)}%"
+                tvPriceChange24h.text =
+                    "⬋${decimalFormat.format(data.price_change_percentage_24h)}%"
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.data_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.data_item_first, parent, false)
         return DataHolder(view)
     }
 
