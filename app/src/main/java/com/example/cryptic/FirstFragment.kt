@@ -40,6 +40,7 @@ class FirstFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         btnCurrencyAdd.setOnClickListener {
+            dataAdapterFirst.curList.clear()
             recyclerView.removeAllViewsInLayout()
             requestData()
             sharedList.setData(dataAdapterFirst.curList)

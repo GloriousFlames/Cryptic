@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/akatab_bold"
-        android:text="I Have $"
+        android:text="I Have "
         android:textColor="@color/blue"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +53,30 @@
         android:textColor="@color/blue"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/balanceText"
+        app:layout_constraintStart_toEndOf="@+id/leftSymbol"
         app:layout_constraintTop_toBottomOf="@+id/recyclerViewSecond" />
+
+    <TextView
+        android:id="@+id/leftSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/akatab_bold"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="@+id/balanceText"
+        app:layout_constraintStart_toEndOf="@+id/balanceText" />
+
+    <TextView
+        android:id="@+id/rightSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/akatab_bold"
+        android:text="$"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/balanceText"
+        app:layout_constraintStart_toEndOf="@+id/balance" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
