@@ -1,8 +1,7 @@
 package com.example.cryptic
 
-import android.icu.number.Precision.currency
+import android.content.ClipData.Item
 import android.icu.text.DecimalFormat
-import android.icu.util.Currency
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,22 +16,25 @@ import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.w3c.dom.Text
-import java.text.NumberFormat
 import java.util.Locale
 
 
 class SecondFragment : Fragment(), DialogFrag.DialogListener {
 
     private val dataAdapterSecond = DataAdapterSecond()
-    private lateinit var sharedData : ShareData
-    private lateinit var balance : TextView
+    private lateinit var sharedData: ShareData
+    private lateinit var balance: TextView
+    private lateinit var coins: CurrencyObject
+    private lateinit var currency: String
+    private lateinit var leftSymbol: TextView
+    private lateinit var rightSymbol: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +48,10 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
 
         val btnInventoryAdd : Button = view.findViewById(R.id.btnInventoryAdd)
         val recyclerView : RecyclerView = view.findViewById(R.id.recyclerViewSecond)
-        var coins = CurrencyObject(mapOf(),CurrencyMeta(""))
-        var currency = "USD"
-        var leftSymbol : TextView = view.findViewById(R.id.leftSymbol)
-        var rightSymbol : TextView = view.findViewById(R.id.rightSymbol)
+        coins = CurrencyObject(mapOf(),CurrencyMeta(""))
+        currency = "USD"
+        leftSymbol = view.findViewById(R.id.leftSymbol)
+        rightSymbol = view.findViewById(R.id.rightSymbol)
 
         balance = view.findViewById(R.id.balance)
         balance.setOnClickListener {
@@ -57,7 +59,6 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
             val popupMenu = PopupMenu(activity, balance, Gravity.TOP)
             popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
             popupMenu.show()
-            val decimalFormat = DecimalFormat("#.##")
             popupMenu.setOnMenuItemClickListener { item : MenuItem ->
                 when (item.itemId) {
                     R.id.menuUSD -> {
@@ -66,7 +67,7 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
                             rightSymbol.text = ""
                             for (cur in coins.data.keys) {
                                 if (cur == currency) {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() / coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() / coins.data[cur]!!.value)
                                     currency = "USD"
                                 }
                             }
@@ -78,12 +79,12 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
                             rightSymbol.text = "RUB"
                             for (cur in coins.data.keys) {
                                 if (cur == currency) {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() / coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() / coins.data[cur]!!.value)
                                 }
                             }
                             for (cur in coins.data.keys) {
                                 if (cur == "RUB") {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() * coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() * coins.data[cur]!!.value)
                                     currency = "RUB"
                                 }
                             }
@@ -95,12 +96,12 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
                             rightSymbol.text = "UAH"
                             for (cur in coins.data.keys) {
                                 if (cur == currency) {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() / coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() / coins.data[cur]!!.value)
                                 }
                             }
                             for (cur in coins.data.keys) {
                                 if (cur == "UAH") {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() * coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() * coins.data[cur]!!.value)
                                     currency = "UAH"
                                 }
                             }
@@ -112,12 +113,12 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
                             rightSymbol.text = ""
                             for (cur in coins.data.keys) {
                                 if (cur == currency) {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() / coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() / coins.data[cur]!!.value)
                                 }
                             }
                             for (cur in coins.data.keys) {
                                 if (cur == "EUR") {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() * coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() * coins.data[cur]!!.value)
                                     currency = "EUR"
                                 }
                             }
@@ -129,19 +130,18 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
                             rightSymbol.text = "BYN"
                             for (cur in coins.data.keys) {
                                 if (cur == currency) {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() / coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() / coins.data[cur]!!.value)
                                 }
                             }
                             for (cur in coins.data.keys) {
                                 if (cur == "BYN") {
-                                    balance.text = decimalFormat.format(balance.text.toString().toFloat() * coins.data[cur]!!.value)
+                                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() * coins.data[cur]!!.value)
                                     currency = "BYN"
                                 }
                             }
                         }
                     }
                 }
-                Log.i("Currency", "$coins")
                 true
             }
         }
@@ -154,6 +154,15 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
             sharedData = ViewModelProvider(requireActivity()).get(ShareData::class.java)
             DialogFrag().show(childFragmentManager, null)
         }
+        val item = object : SwipeToDelete(requireContext(), 0, ItemTouchHelper.RIGHT) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    dataAdapterSecond.deleteData(viewHolder.adapterPosition)
+                    updateBalance()
+                }
+            }
+
+        val itemTouchHelper = ItemTouchHelper(item)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     override fun moveData(name: String, count: Float) {
@@ -168,6 +177,16 @@ class SecondFragment : Fragment(), DialogFrag.DialogListener {
 
     private fun updateBalance() {
         var curBalance = 0f
+        if (currency != "USD") {
+            leftSymbol.text = "$"
+            rightSymbol.text = ""
+            for (cur in coins.data.keys) {
+                if (cur == currency) {
+                    balance.text = String.format(Locale.US,"%.2f",balance.text.toString().toFloat() / coins.data[cur]!!.value)
+                    currency = "USD"
+                }
+            }
+        }
         for (data in dataAdapterSecond.curList) {
             curBalance += data.current_price*data.count
         }

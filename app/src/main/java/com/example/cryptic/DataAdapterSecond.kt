@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 class DataAdapterSecond: RecyclerView.Adapter<DataAdapterSecond.DataHolder>() {
@@ -72,4 +73,11 @@ class DataAdapterSecond: RecyclerView.Adapter<DataAdapterSecond.DataHolder>() {
             notifyItemInserted(curList.size - 1)
         }
     }
+
+    fun deleteData(position: Int) {
+        curList[position].count = 0f;
+        curList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
 }

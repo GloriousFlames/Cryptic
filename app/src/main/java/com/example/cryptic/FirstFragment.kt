@@ -17,6 +17,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.internal.notify
 
 class FirstFragment : Fragment() {
 
@@ -42,6 +43,7 @@ class FirstFragment : Fragment() {
         btnCurrencyAdd.setOnClickListener {
             dataAdapterFirst.curList.clear()
             recyclerView.removeAllViewsInLayout()
+            dataAdapterFirst.notifyDataSetChanged()
             requestData()
             sharedList.setData(dataAdapterFirst.curList)
         }
